@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <div>
-    {% for message in messages %}
+    {% for message in messages|slice(0, limit) %}
         <li> {{ message }} </li>
     {% endfor %}
-    {% if messages|length == 0 %}
+
+    {% if limit == 0 %}
         <li>No messages</li>
     {% endif %}
 </div>
