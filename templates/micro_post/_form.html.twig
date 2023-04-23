@@ -1,0 +1,18 @@
+{{ form_start(form, {'attr': {'class': 'form-group'}}) }}
+<div>{{ form_errors(form) }}</div>
+
+<div>
+    {{ form_label(form.title, 'Please enter the title') }}
+    {{ form_widget(form.title, {'attr': {
+        'style': 'color: gray'
+    }}) }}
+</div>
+
+<div>
+    {{ form_label(form.text, 'Please enter the post text') }}
+    {{ form_widget(form.text, {'attr': {
+        'style': 'color: gray'
+    }}) }}
+</div>
+<input type="submit" value="Submit">
+{{ form_end(form) }}
