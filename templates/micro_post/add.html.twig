@@ -4,27 +4,22 @@
 {% block title %}Create New Post{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'class': 'form-group'}}) }}
         <div>{{ form_errors(form) }}</div>
 
-        <div>
+        <div class="form-group mb-2">
             {{ form_label(form.title, 'Please enter the title') }}
-        </div>
-        <div>
-            {{ form_widget(form.title, {'attr': {'style': 'color: gray'}}) }}
+            {{ form_widget(form.title, {'attr': {
+                'style': 'color: gray'
+            }}) }}
         </div>
 
-        <div>
+        <div class="form-group mb-2">
             {{ form_label(form.text, 'Please enter the post text') }}
+            {{ form_widget(form.text, {'attr': {
+                'style': 'color: gray'
+            }}) }}
         </div>
-        <div>
-            {{ form_widget(form.text) }}
-        </div>
-
-        <div>
-            <button type="submit">Save</button>
-        </div>
+        <input class="btn btn-success" type="submit" value="Submit">
     {{ form_end(form) }}
 {% endblock %}
-
-
