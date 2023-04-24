@@ -2,6 +2,10 @@
 
 {% block title %}Post | {{ post.title }} {% endblock %}
 
+{% block bread %}
+→ Post
+{% endblock %}
+
 {% block body %}
     {{ include('micro_post/_post.html.twig', {post: post}) }}
 {% endblock %}
