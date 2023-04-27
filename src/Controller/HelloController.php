@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use DateTime;
+use App\Entity\Comment;
+use App\Entity\MicroPost;
+use App\Repository\CommentRepository;
+use App\Repository\MicroPostRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HelloController extends AbstractController
 {
@@ -15,14 +20,39 @@ class HelloController extends AbstractController
     ];
 
 
-    #[Route('/{limit<\d+>?3}', name: 'app_index')]
-    public function index(int $limit): Response
+    #[Route('/', name: 'app_index')]
+    public function index(MicroPostRepository $posts, CommentRepository $comments): Response
     {
+        // this causes issues, cascade isn't set to persist by default
+        // so when you create a post and then create a comment
+        // you need to persist both the post and the comment
+        // but if you set cascade to persist on the post entity
+        // you don't have to persist the comment, but in most cases you will
+        // be creating comments on there own as posts will have already been created
+        // $post = new MicroPost();
+        // $post->setTitle('Hello');
+        // $post->setText('Hello');
+        // $post->setCreated(new DateTime());
+
+        $post = $posts->find(1);
+        // removing a comment
+        // this can only be done through the posts repo as the comment entity 'post_id' is not nullable
+        // so it has to be done from the post side
+        // $comment = $post->getComments()[0];
+        // $post->removeComment($comment);
+        // $posts->save($post, true);
+
+        $comment = new Comment();
+        $comment->setText('Hello');
+        $comment->setPost($post);
+        // $post->addComment($comment);
+        // $posts->save($post, true);
+        $comments->save($comment, true);
+
         return $this->render(
             '/hello/index.html.twig',
             [
                 'messages' => $this->messages,
-                'limit' => $limit
             ]
 
         );

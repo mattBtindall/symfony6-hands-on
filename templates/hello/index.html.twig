@@ -2,16 +2,13 @@
 {% block body %}
 <div>
     <div>
-        {% for key,message in messages|slice(0, limit) %}
+        {% for key,message in messages %}
             <div>
                 <a href="{{ path('app_show', {id: key}) }}"> {{ message.message }} </a>
             </div>
             {{ include('hello/_message.html.twig', {message: message}) }}
         {% endfor %}
 
-        {% if limit == 0 %}
-            <div>No messages</div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
