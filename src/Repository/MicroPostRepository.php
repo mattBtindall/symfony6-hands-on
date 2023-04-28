@@ -39,6 +39,17 @@ class MicroPostRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllWithComments(): array
+    {
+        // p is the alias for microPost
+        // c is the alias for comment
+        return $this->createQueryBuilder('p')
+            ->addSelect('c')
+            ->leftJoin('p.comments', 'c')
+            ->orderBy('p.created', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return MicroPost[] Returns an array of MicroPost objects
 //     */
