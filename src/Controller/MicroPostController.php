@@ -9,6 +9,7 @@ use App\Form\MicroPostType;
 use App\Repository\CommentRepository;
 use App\Repository\MicroPostRepository;
 use DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -34,9 +35,9 @@ class MicroPostController extends AbstractController
     }
 
     #[Route('/micro-post/add', name: 'app_micro_post_add', priority: 2)]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function add(Request $request, MicroPostRepository $posts): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form = $this->createForm(MicroPostType::class, new MicroPost());
 
         $form->handleRequest($request);
