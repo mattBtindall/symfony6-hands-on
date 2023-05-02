@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: MicroPostRepository::class)]
 class MicroPost
@@ -44,6 +45,7 @@ class MicroPost
     {
         $this->comments = new ArrayCollection();
         $this->likedBy = new ArrayCollection();
+        $this->created = new DateTime;
     }
 
     public function getId(): ?int
