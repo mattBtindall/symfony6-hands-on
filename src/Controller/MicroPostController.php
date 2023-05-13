@@ -83,7 +83,6 @@ class MicroPostController extends AbstractController
     }
 
     #[Route('/micro-post/{post}/comment', name: 'app_micro_post_comment')]
-    // #[IsGranted('ROLE_COMMENTER')]
     public function addComment(MicroPost $post, Request $request, CommentRepository $comments): Response
     {
         $form = $this->createForm(CommentsType::class, new Comment());
@@ -109,5 +108,15 @@ class MicroPostController extends AbstractController
                 'post' => $post
             ]
         );
+    }
+
+    #[Route('/php-info', name: 'app_php_ini')]
+    public function phpini(): Response
+    {
+        $info = phpinfo();
+
+        return $this->render('micro_post/info.html.twig', [
+            'info'=> $info
+        ]);
     }
 }
