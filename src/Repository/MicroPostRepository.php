@@ -7,6 +7,7 @@ use App\Entity\MicroPost;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * @extends ServiceEntityRepository<MicroPost>
@@ -61,6 +62,35 @@ class MicroPostRepository extends ServiceEntityRepository
                 'author',
                 $author instanceof User ? $author->getId() : $author
             )
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllWithMinLikes(int $minLikes): array
+    {
+        // get the ids for the min posts
+        // notice here that it is done within the sql query
+        // and not all of the posts are fetched and then queired
+        // this would be much slower
+        // LESSON TO TAKE - DON'T WRITE SUPER COMPLEX QUERIES
+        // AND DON'T FETCH ALL DATA AND THEN FILTER - THIS DOESN'T SCALE
+        $idList = $this->findAllQuery(withLikes: true)
+            ->select('p.id')
+            ->groupBy('p.id')
+            ->having('COUNT(l) >= :minLikes')
+            ->setParameter('minLikes', $minLikes)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_SCALAR_COLUMN);
+
+        // get posts with all info for the post ids
+        return $this->findAllQuery(
+            withComments: true,
+            withLikes: true,
+            withAuthors: true,
+            withProfiles: true
+        )
+            ->where('p.id in (:idList)')
+            ->setParameter('idList', $idList)
             ->getQuery()
             ->getResult();
     }
